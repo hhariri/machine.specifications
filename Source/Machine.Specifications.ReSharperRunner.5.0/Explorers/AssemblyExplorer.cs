@@ -4,9 +4,6 @@ using System.Linq;
 using JetBrains.Application;
 using JetBrains.Metadata.Reader.API;
 using JetBrains.ProjectModel;
-#if RESHARPER_6
-using JetBrains.ReSharper.TaskRunnerFramework.UnitTesting;
-#endif
 using JetBrains.ReSharper.UnitTestFramework;
 using JetBrains.Util;
 
@@ -37,7 +34,11 @@ namespace Machine.Specifications.ReSharperRunner.Explorers
         var projectEnvoy = new ProjectModelElementEnvoy(project);
 
         var cache = new ContextCache();
+#if RESHARPER_6
+        _contextFactory = new ContextFactory(provider, projectEnvoy, _assembly.Location.FullPath, cache);
+#else
         _contextFactory = new ContextFactory(provider, projectEnvoy, _assembly.Location, cache);
+#endif
         _contextSpecificationFactory = new ContextSpecificationFactory(provider, projectEnvoy, cache);
         _behaviorFactory = new BehaviorFactory(provider, projectEnvoy, cache);
         _behaviorSpecificationFactory = new BehaviorSpecificationFactory(provider, projectEnvoy);
@@ -46,7 +47,12 @@ namespace Machine.Specifications.ReSharperRunner.Explorers
 
     public void Explore()
     {
-      if (!_assembly.ReferencedAssembliesNames.Any(x => String.Equals(x.AssemblyName.Name,
+      if (!_assembly.ReferencedAssembliesNames.Any(x => String.Equals(
+#if RESHARPER_6
+                                                                      x.Name,
+#else
+                                                                      x.AssemblyName.Name,
+#endif
                                                                       typeof(It).Assembly.GetName().Name,
                                                                       StringComparison.InvariantCultureIgnoreCase)))
       {

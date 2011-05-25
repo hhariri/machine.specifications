@@ -13,11 +13,11 @@ namespace Machine.Specifications.ReSharperRunner.Factories
   internal class BehaviorFactory
   {
     readonly ProjectModelElementEnvoy _projectEnvoy;
-    readonly IUnitTestProvider _provider;
+    readonly MSpecUnitTestProvider _provider;
     readonly ContextCache _cache;
     static readonly IDictionary<string, string> TypeNameCache = new Dictionary<string, string>();
 
-    public BehaviorFactory(IUnitTestProvider provider, ProjectModelElementEnvoy projectEnvoy, ContextCache cache)
+    public BehaviorFactory(MSpecUnitTestProvider provider, ProjectModelElementEnvoy projectEnvoy, ContextCache cache)
     {
       _provider = provider;
       _cache = cache;
@@ -26,7 +26,11 @@ namespace Machine.Specifications.ReSharperRunner.Factories
 
     public BehaviorElement CreateBehavior(IDeclaredElement field)
     {
+#if RESHARPER_6
+      IClass clazz = ((ITypeMember)field).GetContainingType() as IClass;
+#else
       IClass clazz = field.GetContainingType() as IClass;
+#endif
       if (clazz == null)
       {
         return null;
@@ -49,7 +53,11 @@ namespace Machine.Specifications.ReSharperRunner.Factories
       return new BehaviorElement(_provider,
                                  context,
                                  _projectEnvoy,
+#if RESHARPER_6
+                                 clazz.GetClrName().FullName,
+#else
                                  clazz.CLRName,
+#endif
                                  field.ShortName,
                                  field.IsIgnored(),
                                  fullyQualifiedTypeName);

@@ -3,10 +3,8 @@ using System.Linq;
 using JetBrains.ProjectModel;
 using JetBrains.ReSharper.Psi;
 using JetBrains.ReSharper.Psi.Util;
-using JetBrains.Text;
-using Machine.Specifications.Utility;
+
 using Machine.Specifications.Utility.Internal;
-using JetBrains.ReSharper.UnitTestFramework;
 
 namespace Machine.Specifications.ReSharperRunner.Presentation
 {
@@ -14,13 +12,13 @@ namespace Machine.Specifications.ReSharperRunner.Presentation
     {
         readonly string _fieldName;
 
-        protected FieldElement(IUnitTestProvider provider,
-                               UnitTestElement parent,
+        protected FieldElement(MSpecUnitTestProvider provider,
+                               Element parent,
                                ProjectModelElementEnvoy projectEnvoy,
                                string declaringTypeName,
                                string fieldName,
                                bool isIgnored)
-            : base(provider, parent, projectEnvoy, declaringTypeName, isIgnored || parent.IsExplicit)
+            : base(provider, parent, projectEnvoy, declaringTypeName, isIgnored || parent.Explicit)
         {
             _fieldName = fieldName;
         }
@@ -35,21 +33,12 @@ namespace Machine.Specifications.ReSharperRunner.Presentation
             get { return _fieldName; }
         }
 
-        public override string GetTitle()
+        public override string GetPresentation()
         {
             return String.Format("{0}{1}{2}",
                                  GetTitlePrefix(),
                                  String.IsNullOrEmpty(GetTitlePrefix()) ? String.Empty : " ",
                                  FieldName.ToFormat());
-        }
-
-        public override bool Matches(string filter, IdentifierMatcher matcher)
-        {
-            if (Parent.Matches(filter, matcher))
-            {
-                return true;
-            }
-            return matcher.Matches(FieldName);
         }
 
         public override IDeclaredElement GetDeclaredElement()

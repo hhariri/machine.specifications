@@ -44,6 +44,9 @@
     <Reference Include="JetBrains.Platform.ReSharper.DocumentManager">
       <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.Platform.ReSharper.DocumentManager.dll</HintPath>
     </Reference>
+    <Reference Include="JetBrains.Platform.ReSharper.DocumentModel">
+      <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.Platform.ReSharper.DocumentModel.dll</HintPath>
+    </Reference>
     <Reference Include="JetBrains.Platform.ReSharper.IDE">
       <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.Platform.ReSharper.IDE.dll</HintPath>
     </Reference>
@@ -70,6 +73,9 @@
     </Reference>
     <Reference Include="JetBrains.ReSharper.Psi">
       <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.ReSharper.Psi.dll</HintPath>
+    </Reference>
+    <Reference Include="JetBrains.ReSharper.Resources">
+      <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.ReSharper.Resources.dll</HintPath>
     </Reference>
     <Reference Include="JetBrains.ReSharper.TaskRunnerFramework">
       <HintPath>..\..\Libraries\ReSharper\6.0\JetBrains.ReSharper.TaskRunnerFramework.dll</HintPath>
@@ -104,9 +110,6 @@
     </Compile>
     <Compile Include="..\Machine.Specifications.ReSharperRunner.4.1\Factories\UnitTestTaskFactory.cs">
       <Link>Factories\UnitTestTaskFactory.cs</Link>
-    </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.4.1\MetadataExtensions.cs">
-      <Link>MetadataExtensions.cs</Link>
     </Compile>
     <Compile Include="..\Machine.Specifications.ReSharperRunner.4.1\PsiExtensions.cs">
       <Link>PsiExtensions.cs</Link>
@@ -156,9 +159,6 @@
     <Compile Include="..\Machine.Specifications.ReSharperRunner.4.5\MSpecElementNaming.cs">
       <Link>MSpecElementNaming.cs</Link>
     </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.4.5\Presentation\Presenter.cs">
-      <Link>Presentation\Presenter.cs</Link>
-    </Compile>
     <Compile Include="..\Machine.Specifications.ReSharperRunner.4.5\PsiExtensions.4.5.cs">
       <Link>PsiExtensions.4.5.cs</Link>
     </Compile>
@@ -186,18 +186,6 @@
     <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\MetadataExtensions.5.0.cs">
       <Link>MetadataExtensions.5.0.cs</Link>
     </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\Presentation\BehaviorElement.cs">
-      <Link>Presentation\BehaviorElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\Presentation\BehaviorSpecificationElement.cs">
-      <Link>Presentation\BehaviorSpecificationElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\Presentation\ContextElement.cs">
-      <Link>Presentation\ContextElement.cs</Link>
-    </Compile>
-    <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\Presentation\ContextSpecificationElement.cs">
-      <Link>Presentation\ContextSpecificationElement.cs</Link>
-    </Compile>
     <Compile Include="..\Machine.Specifications.ReSharperRunner.5.0\Tasks\Task.5.0.cs">
       <Link>Tasks\Task.5.0.cs</Link>
     </Compile>
@@ -207,9 +195,13 @@
     <Compile Include="..\VersionInfo.cs">
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="MetadataExtensions.cs" />
+    <Compile Include="Presentation\BehaviorElement.cs" />
+    <Compile Include="Presentation\BehaviorSpecificationElement.cs" />
+    <Compile Include="Presentation\ContextElement.cs" />
+    <Compile Include="Presentation\ContextSpecificationElement.cs" />
     <Compile Include="Presentation\Element.cs" />
     <Compile Include="Presentation\FieldElement.cs" />
-    <Compile Include="Presentation\UnitTestElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
@@ -223,14 +215,6 @@
       <Project>{CCD02629-1262-4F78-9E9F-AC97B942D0E7}</Project>
       <Name>Machine.Specifications</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="InstallResharperRunner.5.1 - VS2008.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="InstallResharperRunner.5.1 - VS2010.bat">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

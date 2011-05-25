@@ -21,7 +21,7 @@ namespace Machine.Specifications.ReSharperRunner.Explorers
     readonly IFile _file;
     readonly CheckForInterrupt _interrupted;
 
-    public FileExplorer(IUnitTestProvider provider,
+    public FileExplorer(MSpecUnitTestProvider provider,
                         UnitTestElementLocationConsumer consumer,
                         IFile file,
                         CheckForInterrupt interrupted)
@@ -40,7 +40,11 @@ namespace Machine.Specifications.ReSharperRunner.Explorers
       _file = file;
       _interrupted = interrupted;
 
+#if RESHARPER_6
+      IProject project = file.GetSourceFile().ToProjectFile().GetProject();
+#else
       IProject project = file.ProjectFile.GetProject();
+#endif
       var projectEnvoy = new ProjectModelElementEnvoy(project);
       string assemblyPath = UnitTestManager.GetOutputAssemblyPath(project).FullPath;
 

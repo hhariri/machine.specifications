@@ -1,13 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
 using JetBrains.Metadata.Reader.API;
-#if RESHARPER_6
-using CLRTypeName = JetBrains.ReSharper.Psi.ClrTypeName;
-#else
 using JetBrains.ReSharper.Psi;
-#endif
 
 namespace Machine.Specifications.ReSharperRunner
 {
@@ -41,9 +37,9 @@ namespace Machine.Specifications.ReSharperRunner
       {
         if (field.GetFirstGenericArgument().HasCustomAttribute(typeof(BehaviorsAttribute).FullName)
 #if !RESHARPER_5
-            && field.GetFirstGenericArgument().GenericParameters.Length == 0      
+ && field.GetFirstGenericArgument().GenericParameters.Length == 0
 #endif
-            )
+)
         {
           yield return field;
         }
@@ -61,17 +57,17 @@ namespace Machine.Specifications.ReSharperRunner
       var attribute = attributes.First();
 
       var parameters = attribute.ConstructorArguments.Select(x =>
-                                    {
-                                      var typeArgument = x as IMetadataClassType;
-                                      if (typeArgument != null)
-                                      {
-                                        return new CLRTypeName(typeArgument.Type.FullyQualifiedName).ShortName;
-                                      }
+      {
+        var typeArgument = x.Type as IMetadataClassType;
+        if (typeArgument != null)
+        {
+          return new ClrTypeName(typeArgument.Type.FullyQualifiedName).ShortName;
+        }
 
-                                      return (string) x;
-                                    })
+        return (string)x.Value;
+      })
                                   .ToArray();
-      
+
       return String.Join(" ", parameters);
     }
 
@@ -80,8 +76,8 @@ namespace Machine.Specifications.ReSharperRunner
       return type.AndAllBaseTypes()
         .SelectMany(x => x.GetCustomAttributes(typeof(TagsAttribute).FullName))
         .Select(x => x.ConstructorArguments)
-        .Flatten(tag => tag.FirstOrDefault() as string,
-                 tag => tag.Skip(1).FirstOrDefault() as IEnumerable<string>)
+        .Flatten(tag => tag.FirstOrDefault().Value as string,
+                 tag => tag.Skip(1).FirstOrDefault().Value as IEnumerable<string>)
         .Distinct()
         .ToList();
     }
@@ -106,8 +102,8 @@ namespace Machine.Specifications.ReSharperRunner
 
     public static IMetadataTypeInfo GetFirstGenericArgument(this IMetadataField genericField)
     {
-      var genericArgument = ((IMetadataClassType) genericField.Type).Arguments.First();
-      return ((IMetadataClassType) genericArgument).Type;
+      var genericArgument = ((IMetadataClassType)genericField.Type).Arguments.First();
+      return ((IMetadataClassType)genericArgument).Type;
     }
 
     public static IMetadataClassType FirstGenericArgumentClass(this IMetadataField genericField)
@@ -150,8 +146,8 @@ namespace Machine.Specifications.ReSharperRunner
     {
       return type.GetPrivateFields()
         .Where(x => x.Type is IMetadataClassType)
-        .Where(x => new CLRTypeName(((IMetadataClassType) x.Type).Type.FullyQualifiedName) ==
-                    new CLRTypeName(fieldType.FullName));
+        .Where(x => new ClrTypeName(((IMetadataClassType)x.Type).Type.FullyQualifiedName) ==
+                    new ClrTypeName(fieldType.FullName));
     }
   }
 }
